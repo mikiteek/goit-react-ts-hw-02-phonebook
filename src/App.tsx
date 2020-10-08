@@ -5,8 +5,19 @@ import SectionContacts from "./components/SectionContacts/SectionContacts";
 import Filter from "./components/Filter/Filter";
 import ContactList from "./components/ContactList/ContactList";
 
-class App extends Component {
-  state = {
+interface contactType {
+  id: string,
+  name: string,
+  number: string,
+}
+
+interface stateProps {
+  contacts: contactType[],
+  filter: string,
+}
+
+class App extends Component<{},stateProps> {
+  public state = {
     contacts: [
       {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
       {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
@@ -16,15 +27,16 @@ class App extends Component {
     filter: "",
   };
 
-  addContact = contact => {
+  private addContact = (contact: contactType): void => {
     const {name, number} = contact;
-    if (name === "" || number === "")
-      return;
-    if (this.state.contacts.findIndex(contact => contact.name === name) !== -1) {
+    if (name === "" || number === "") return;
+
+    const {contacts} = this.state;
+    if (contacts.findIndex(contact => contact.name === name) !== -1) {
       alert(`${name} is already in contacts.`);
       return;
     }
-    const contactNew = {
+    const contactNew: contactType = {
       id: uuid(),
       name,
       number,
@@ -34,20 +46,21 @@ class App extends Component {
     }));
   };
 
-  getVisibleContacts = () => {
+  private getVisibleContacts = (): contactType[] => {
     const {filter, contacts} = this.state;
     return contacts.filter(({name}) => name.toLowerCase().includes(filter.toLowerCase()));
   }
-  changeFilter = event => {
-    this.setState({filter: event.target.value});
+  private changeFilter = (event: any): void => {
+    const {value}: {value: string} = event.target;
+    this.setState({filter: value});
   }
-  deleteContact = idContact => {
+  private deleteContact = (idContact: string): void => {
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(({id}) => id !== idContact),
     }));
   };
 
-  render() {
+  public render() {
     const contacts = this.getVisibleContacts();
     return (
       <div>
@@ -56,7 +69,6 @@ class App extends Component {
           <Filter onChangeFilter={this.changeFilter}/>
           <ContactList contacts={contacts} onDeleteContact={this.deleteContact}/>
         </SectionContacts>
-
       </div>
     );
   }

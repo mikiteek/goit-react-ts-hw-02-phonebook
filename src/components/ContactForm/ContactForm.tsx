@@ -1,28 +1,33 @@
 import React, {Component} from "react";
-import PropTypes from "prop-types";
 import styles from "./ContactForm.module.css";
 
-class ContactForm extends Component {
+interface stateTypes {
+  name: string,
+  number: string,
+}
+interface propTypes {
+  onSubmit: any,
+}
+
+class ContactForm extends Component<propTypes, stateTypes> {
   state = {
     name: "",
     number: "",
   }
-  static propTypes = {
-    onSubmit: PropTypes.func.isRequired,
-  }
 
-  handleSubmit = event => {
+  private handleSubmit = (event: any): void => {
     event.preventDefault();
     const {name, number} = this.state;
-    this.props.onSubmit({name, number})
+    const {onSubmit} = this.props;
+    onSubmit({name, number})
   };
 
-  handleChange = event => {
+  private handleChange = (event: any): void => {
     const {name, value} = event.target;
-    this.setState({[name]: value});
+    this.setState({[name]: value} as any);
   };
 
-  render() {
+  public render() {
     const inputStyles = [styles["form-element"], styles["form-input"]];
     return (
       <section className={styles["section-contacts"]}>
