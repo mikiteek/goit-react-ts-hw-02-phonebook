@@ -6,7 +6,7 @@ interface Props {
 }
 
 class SectionContacts extends Component<Props> {
-  render() {
+  public render() {
     const {title, children} = this.props;
     return (
     <section>
