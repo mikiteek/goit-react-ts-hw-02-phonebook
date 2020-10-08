@@ -11,7 +11,12 @@ interface contactType {
   number: string,
 }
 
-class App extends Component {
+interface stateProps {
+  contacts: contactType[],
+  filter: string,
+}
+
+class App extends Component<null, stateProps> {
   state = {
     contacts: [
       {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
@@ -48,11 +53,11 @@ class App extends Component {
   // changeFilter = event => {
   //   this.setState({filter: event.target.value});
   // }
-  // deleteContact = idContact => {
-  //   this.setState(prevState => ({
-  //     contacts: prevState.contacts.filter(({id}) => id !== idContact),
-  //   }));
-  // };
+  deleteContact = (idContact: string) => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(({id}) => id !== idContact),
+    }));
+  };
 
   render() {
     const contacts = this.getVisibleContacts();
@@ -61,7 +66,7 @@ class App extends Component {
         <ContactForm onSubmit={this.addContact}/>
         {/*<SectionContacts title="Contacts">*/}
         {/*  <Filter onChangeFilter={this.changeFilter}/>*/}
-        {/*  <ContactList contacts={contacts} onDeleteContact={this.deleteContact}/>*/}
+          <ContactList contacts={contacts} onDeleteContact={this.deleteContact}/>
         {/*</SectionContacts>*/}
 
       </div>
