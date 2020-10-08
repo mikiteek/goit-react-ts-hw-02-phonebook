@@ -5,6 +5,12 @@ import SectionContacts from "./components/SectionContacts/SectionContacts";
 import Filter from "./components/Filter/Filter";
 import ContactList from "./components/ContactList/ContactList";
 
+interface contactType {
+  id: string,
+  name: string,
+  number: string,
+}
+
 class App extends Component {
   state = {
     contacts: [
@@ -16,20 +22,21 @@ class App extends Component {
     filter: "",
   };
 
-  addContact = contact => {
-    const {name, number} = contact;
-    if (name === "" || number === "")
-      return;
-    if (this.state.contacts.findIndex(contact => contact.name === name) !== -1) {
+  addContact = (contact: any): void => {
+    const {name, number}: {name: string, number: string} = contact;
+    if (name === "" || number === "") return;
+
+    const {contacts}:{contacts: contactType[]} = this.state;
+    if (contacts.findIndex(contact => contact.name === name) !== -1) {
       alert(`${name} is already in contacts.`);
       return;
     }
-    const contactNew = {
+    const contactNew: contactType = {
       id: uuid(),
       name,
       number,
     };
-    this.setState(({contacts}) => ({
+    this.setState(({contacts}:{contacts: contactType[]}) => ({
       contacts: [...contacts, contactNew],
     }));
   };
@@ -38,24 +45,24 @@ class App extends Component {
     const {filter, contacts} = this.state;
     return contacts.filter(({name}) => name.toLowerCase().includes(filter.toLowerCase()));
   }
-  changeFilter = event => {
-    this.setState({filter: event.target.value});
-  }
-  deleteContact = idContact => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(({id}) => id !== idContact),
-    }));
-  };
+  // changeFilter = event => {
+  //   this.setState({filter: event.target.value});
+  // }
+  // deleteContact = idContact => {
+  //   this.setState(prevState => ({
+  //     contacts: prevState.contacts.filter(({id}) => id !== idContact),
+  //   }));
+  // };
 
   render() {
     const contacts = this.getVisibleContacts();
     return (
       <div>
         <ContactForm onSubmit={this.addContact}/>
-        <SectionContacts title="Contacts">
-          <Filter onChangeFilter={this.changeFilter}/>
-          <ContactList contacts={contacts} onDeleteContact={this.deleteContact}/>
-        </SectionContacts>
+        {/*<SectionContacts title="Contacts">*/}
+        {/*  <Filter onChangeFilter={this.changeFilter}/>*/}
+        {/*  <ContactList contacts={contacts} onDeleteContact={this.deleteContact}/>*/}
+        {/*</SectionContacts>*/}
 
       </div>
     );
